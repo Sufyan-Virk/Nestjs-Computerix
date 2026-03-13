@@ -21,7 +21,7 @@ import { StripPropertiesPipe } from '../common/pipes/strip-properties.pipe';
 @Controller('user')
 @UseGuards(RolesGuard)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   @UsePipes(new YupValidationPipe(createUserSchema))
@@ -31,6 +31,7 @@ export class UserController {
 
   @Get()
   findAll() {
+    console.log(34, "findAll")
     return this.userService.findAll();
   }
 

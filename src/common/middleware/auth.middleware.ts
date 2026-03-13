@@ -1,11 +1,11 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  // In a real app, use ConfigService for secrets
-  private readonly secret = 'super-secret-key';
+  constructor(private configService: ConfigService) { }
 
   use(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
@@ -17,10 +17,12 @@ export class AuthMiddleware implements NestMiddleware {
     const token = authHeader.split(' ')[1];
 
     try {
-      const decoded = jwt.verify(token, this.secret);
+      const secret = this.configService.get<string>('JWT_SECRET') || 'super-secret-key';
+      const decoded = jwt.verify(token, secret);
       // Attach the decoded user payload to the request object
       // so guards and controllers can access it
       req['user'] = decoded;
+      console.log({ user: decoded });
       next();
     } catch (err) {
       throw new UnauthorizedException('Invalid or expired token');
