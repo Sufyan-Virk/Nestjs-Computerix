@@ -4,9 +4,11 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { AuthMiddleware } from '../common/middleware/auth.middleware';
 import { User, UserSchema } from './schemas/user.schema';
+import { Product, ProductSchema } from '../product/product.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, { name: Product.name, schema: ProductSchema }]),
+    ],
   controllers: [UserController],
   providers: [UserService],
 })
@@ -17,4 +19,5 @@ export class UserModule implements NestModule {
       .forRoutes(UserController);
   }
 }
+
 
