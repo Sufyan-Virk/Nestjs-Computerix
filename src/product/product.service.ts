@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product, ProductSchema } from './product.schema';
@@ -48,7 +48,9 @@ export class ProductService {
 
 @Injectable() 
 export class TenantProductsService {
-  constructor(@InjectConnection() private connection: Connection) {}
+  constructor(@InjectConnection() private connection: Connection,
+   @Inject('TENANT_CONNECTION') private tennantConnection: Connection
+) {}
 
 async getTenantConnection(tenantId: string) {
   return this.connection.useDb(`tenant_${tenantId}`);

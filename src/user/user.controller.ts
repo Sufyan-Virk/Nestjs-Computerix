@@ -19,7 +19,7 @@ import { YupValidationPipe } from '../common/pipes/yup-validation.pipe';
 import { StripPropertiesPipe } from '../common/pipes/strip-properties.pipe';
 
 @Controller('user')
-@UseGuards(RolesGuard)
+//@UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) { }
 

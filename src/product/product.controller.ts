@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, Req, Inject } from '@nestjs/common';
 import { ProductService, TenantProductsService } from './product.service';
 import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
+import { Connection } from 'mongoose';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService,
-    private readonly TenantProductsService: TenantProductsService
+    private readonly TenantProductsService: TenantProductsService,
+   
   ) {}
 
   @Post()
@@ -21,6 +23,7 @@ export class ProductController {
   @Get()
   async getTenantProducts(@Req() {tenantId}) {
     // 23
+    return this.tennantConnection.db?.databaseName
     return await this.TenantProductsService.getTenantProducts(tenantId);
   }
 

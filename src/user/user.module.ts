@@ -15,9 +15,8 @@ import { Product, ProductSchema } from '../product/product.schema';
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(AuthMiddleware)
+      .apply()
       .forRoutes(UserController);
   }
 }
-
 
