@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Product } from './product.schema';
+import { Product, ProductSchema } from './product.schema';
 import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
-
+import { Connection } from 'mongoose';
 @Injectable()
 export class ProductService {
   constructor(
@@ -44,4 +44,22 @@ export class ProductService {
     }
     return { message: 'Product successfully deleted' };
   }
+}
+
+@Injectable() 
+export class TenantProductsService {
+  constructor(@InjectConnection() private connection: Connection) {}
+
+async getTenantConnection(tenantId: string) {
+  return this.connection.useDb(`tenant_${tenantId}`);
+}
+
+async getTenantProducts(tenantId: string) {
+  const tenantConnection = await this.getTenantConnection(tenantId);
+  const productModel = await tenantConnection.model(
+    Product.name,
+    ProductSchema,
+  );
+  return productModel.find();
+}
 }
